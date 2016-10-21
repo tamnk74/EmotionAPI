@@ -108,48 +108,52 @@ try
 	echo "<div class='col-md-6' style='position:relative'>";
 	echo "<img src='".$url_img."' width='550' height='400px'> ";
 	//display faceRectangle
+	if(empty($result["error"])){
 	$size = getimagesize($url_img);
 	for($i=0; $i< $arrlength; $i++){
-		echo '<div class="facerec" style="position: absolute; left: '.($result[$i]["faceRectangle"]["left"]*550/$size[0]+15).'; top:'.($result[$i]["faceRectangle"]["top"]*400/$size[1]).'; width: '. ($result[$i]["faceRectangle"]["width"]*550/$size[0]).'; height: '.($result[$i]["faceRectangle"]["height"]*400/$size[1]).';border: 3px solid #73AD21;">';
-		echo '<div class="facerecinf" style="position: absolute; display: none;background-color: #b3b3b3;font-size: 10; left: '.($result[$i]["faceRectangle"]["width"]*550/$size[0]-10).'; top: 0; width: 100; height: 120;border: 1px solid black;">anger: '.round($result[$i]["scores"]["anger"],6).'
-		<br>contempt: '.round($result[$i]["scores"]["contempt"],6).'
-		<br>disgust: '.round($result[$i]["scores"]["disgust"],6).'
-		<br>fear: '.round($result[$i]["scores"]["fear"],6).'
-		<br>happiness: '.round($result[$i]["scores"]["happiness"],6).'
-		<br>neutral: '.round($result[$i]["scores"]["neutral"],6).'
-		<br>sadness: '.round($result[$i]["scores"]["sadness"],6).'
-		<br>surprise: '.round($result[$i]["scores"]["surprise"],6).'
-	</div>';
+	echo '<div class="facerec" style="position: absolute; left: '.($result[$i]["faceRectangle"]["left"]*550/$size[0]+15).'; top:'.($result[$i]["faceRectangle"]["top"]*400/$size[1]).'; width: '. ($result[$i]["faceRectangle"]["width"]*550/$size[0]).'; height: '.($result[$i]["faceRectangle"]["height"]*400/$size[1]).';border: 3px solid #73AD21;">';
+		echo '<div style="position: absolute; display: none;z-index: 100;background-color: #b3b3b3; padding-left: 5px; padding-top: 5px; left: '.($result[$i]["faceRectangle"]["width"]*550/$size[0]-10).'; top: 0; width: 120; height: 120;">';
+		echo '<table style="color: white; font-size: 12;">';
+		echo '<tr><td>Anger</td><td>'.number_format($result[$i]["scores"]["anger"],5).'</td>';
+		echo '<tr><td>Contempt</td><td>'.number_format($result[$i]["scores"]["contempt"],5).'</td>';
+		echo '<tr><td>Disgust</td><td>'.number_format($result[$i]["scores"]["disgust"],5).'</td>';
+		echo '<tr><td>Fear</td><td>'.number_format($result[$i]["scores"]["fear"],5).'</td>';
+		echo '<tr><td>Happiness</td><td>'.number_format($result[$i]["scores"]["happiness"],5).'</td>';
+		echo '<tr><td>Neutral</td><td>'.number_format($result[$i]["scores"]["neutral"],5).'</td>';
+		echo '<tr><td>Sadness</td><td>'.number_format($result[$i]["scores"]["sadness"],5).'</td>';
+		echo '<tr><td>Surprise</td><td>'.number_format($result[$i]["scores"]["surprise"],5).'</td>';
+		echo '</table>';
+		echo '</div>';
 	echo '</div>';
+	}
+	}
+	else echo $result["error"];
+	echo "</div>";
+	echo "<div class='col-md-6'>";
+	echo "<pre class='form-control' style='height:100%'>";
+	echo "JSON:\n";
+	displayArr($jsonIterator);
+	echo "</pre>";
+	echo "</div>";
+	echo '<form class="form-group" action="emotion.php" method="post">';
+	echo '<div class="col-md-5">';
+	echo '<input type="text" class="form-control" name="imgurl" id="imgurl" placeholder="URL of image">';
+	echo '</div>';
+	echo 	'<button type="submit" class="btn btn-default col-md-1" name="submit">Submit</button>';
+	echo  '</form>';
+	echo '</div>';
+	echo "<p></p><br><hr><h3>Some images demo</h3>";
+	echo "<a>https://portalstoragewuprod.azureedge.net/emotion/recognition1.jpg</a><br>";
+	echo "<a>https://portalstoragewuprod.azureedge.net/face/demo/detection%205.jpg</a><br>";
+	echo "<a>https://portalstoragewuprod.azureedge.net/emotion/recognition2.jpg</a><br>";
+	echo "<a>https://portalstoragewuprod.azureedge.net/emotion/recognition3.jpg</a><br>";
+	echo "<a>https://portalstoragewuprod.azureedge.net/emotion/recognition4.jpg</a><br>";
 
-}
-echo "</div>";
-echo "<div class='col-md-6'>";
-echo "<pre class='form-control' style='height:100%'>";
-echo "JSON:\n";
-displayArr($jsonIterator);
-echo "</pre>";
-echo "</div>";
-echo '<form class="form-group" action="emotion.php" method="post">';
-echo '<div class="col-md-5">';
-echo '<input type="text" class="form-control" name="imgurl" id="imgurl" placeholder="URL of image">';
-echo '</div>';
-echo 	'<button type="submit" class="btn btn-default col-md-1" name="submit">Submit</button>';
-echo  '</form>';
-echo '</div>';
-echo "<p></p><br><hr><h3>Some images demo</h3>";
-echo "<a>https://portalstoragewuprod.azureedge.net/emotion/recognition1.jpg</a><br>";
-echo "<a>https://portalstoragewuprod.azureedge.net/face/demo/detection%205.jpg</a><br>";
-echo "<a>https://portalstoragewuprod.azureedge.net/emotion/recognition2.jpg</a><br>";
-echo "<a>https://portalstoragewuprod.azureedge.net/emotion/recognition3.jpg</a><br>";
-echo "<a>https://portalstoragewuprod.azureedge.net/emotion/recognition4.jpg</a><br>";
-
-echo $size[0].";".$size[1];
-echo '</div><br><br><br>';
+	echo '</div><br><br><br>';
 }
 catch (HttpException $ex)
 {
-	echo $ex;
+	echo "Input Error";
 }
 echo '</body>';
 echo '</html>';
